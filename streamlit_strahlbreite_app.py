@@ -329,7 +329,7 @@ if "df" in st.session_state:
         for i in range(n_bahnen):
             shift = i * delta_y
             x_shifted = x_interp + shift
-            y_shifted = spline(x_interp)
+            y_shifted = y_interp
             color = tab_colors[i]
             ax2.plot(x_shifted, y_shifted, color=color)
             if i < 2:
