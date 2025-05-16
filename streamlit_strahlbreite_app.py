@@ -3,15 +3,106 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import UnivariateSpline, interp1d
+from io import BytesIO
+import requests
 
 st.set_page_config(layout="wide")
 
+# --- Layout: Logo und Titel ---
+col_title, col_logo = st.columns([4, 1])
+with col_logo:
+    st.image("HSE-Logo.jpg", width=200)
+
 st.title("Vom Einzelstrahl zur Totalbeschichtung")
 
-# --- Abschnitt 1: Datei Upload ---
-st.subheader("1. Einzelstrahlprofil laden")
+# --- Hinweise zur Verwendung ---
+with st.expander("ℹ️ Hinweise zur Verwendung"):
+    st.markdown("""
+Diese App dient zur Visualisierung und Analyse von Strahlbreiten und Totalbeschichtungen in der Applikationstechnik.
 
+Du kannst:
+- **Eigene Excel-Dateien hochladen** mit einem Einzelstrahlprofil (Ort [mm], Schichtdicke [µm]).
+- Oder **Beispieldaten verwenden**, um das Tool ohne eigene Daten zu testen.
+
+Wichtig:
+- Sobald eine Excel-Datei geladen wurde, wird diese verwendet.
+- Um wieder auf Beispieldaten zu wechseln, musst du die Excel (X) entfernen.
+
+Das Tool berechnet automatisch:
+- Die Halbhöhenbreite $Sb_{50}$
+- Den Überlappungsgrad $ÜL$
+- Die mittlere Gesamtschichtdicke $h_{ges}$
+
+Viel Spaß beim Ausprobieren!
+""")
+
+# --- Datei-Upload ---
 uploaded_file = st.file_uploader("Lade eine Excel-Datei hoch (Ort [mm], Schichtdicke [µm])", type=["xlsx"])
+
+# --- Upload Handling ---
+if uploaded_file is not None and uploaded_file != st.session_state.get("uploaded_file"):
+    st.session_state.clear()
+    st.session_state.uploaded_file = uploaded_file
+    st.session_state.file_to_use = uploaded_file
+    st.session_state.source_label = uploaded_file.name
+    st.rerun()
+
+if uploaded_file is None and "file_to_use" in st.session_state and st.session_state.get("uploaded_file") is not None:
+    st.session_state.clear()
+    st.rerun()
+
+# --- Beispieldaten Buttons ---
+col_demo1, col_demo2, col_demo3, col_demo4 = st.columns(4)
+
+with col_demo1:
+    if st.button("Beispiel 1: Enger Strahl"):
+        st.session_state.clear()
+        url = "https://raw.githubusercontent.com/dubbehendrik/strahlbreite/main/Beispiel_Eng.xlsx"
+        response = requests.get(url)
+        if response.status_code == 200:
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 1: Enger Strahl"
+            st.session_state.uploaded_file = None
+            st.rerun()
+
+with col_demo2:
+    if st.button("Beispiel 2: Breiter Strahl"):
+        st.session_state.clear()
+        url = "https://raw.githubusercontent.com/dubbehendrik/strahlbreite/main/Beispiel_Breit.xlsx"
+        response = requests.get(url)
+        if response.status_code == 200:
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 2: Breiter Strahl"
+            st.session_state.uploaded_file = None
+            st.rerun()
+
+with col_demo3:
+    if st.button("Beispiel 3: Asymmetrisch"):
+        st.session_state.clear()
+        url = "https://raw.githubusercontent.com/dubbehendrik/strahlbreite/main/Beispiel_Asymmetrisch.xlsx"
+        response = requests.get(url)
+        if response.status_code == 200:
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 3: Asymmetrisch"
+            st.session_state.uploaded_file = None
+            st.rerun()
+
+with col_demo4:
+    with open("Template_SingleBeam.xlsx", "rb") as f:
+        st.download_button("📥 Template herunterladen", f, file_name="Template_SingleBeam.xlsx")
+
+# --- Anzeige der aktuellen Datei ---
+if "file_to_use" in st.session_state:
+    col_file, col_remove = st.columns([8, 2])
+    with col_file:
+        st.success(f"📄 {st.session_state.source_label}")
+    with col_remove:
+        if st.session_state.get("uploaded_file") is None:
+            if st.button("❌ Entfernen"):
+                st.session_state.clear()
+                st.rerun()
+
+
 
 # Wenn die Datei gelöscht wird, Session State zurücksetzen
 if uploaded_file is None and "df" in st.session_state:
@@ -235,3 +326,44 @@ if "df" in st.session_state:
         Mittlere Schichtdicke h<sub>ges</sub>:&nbsp;{h_ges:6.2f} µm
         </div>
         """, unsafe_allow_html=True)
+
+
+
+
+# --- Feedback & Support ---
+st.markdown("""---""")
+st.subheader("🛠️ Feedback & Support")
+
+col_fb1, col_fb2 = st.columns(2)
+
+with col_fb1:
+    st.markdown("""
+    <a href="https://github.com/dubbehendrik/strahlbreite/issues/new?template=bug_report.yml" target="_blank">
+        <button style="padding: 0.5rem 1rem; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            🐞 Bug melden
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
+
+with col_fb2:
+    st.markdown("""
+    <a href="https://github.com/dubbehendrik/strahlbreite/issues/new?template=feature_request.yml" target="_blank">
+        <button style="padding: 0.5rem 1rem; background-color: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            ✨ Feature anfragen
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
+
+# --- Disclaimer ---
+st.markdown("""---""")
+st.markdown("""
+<div style="font-size: 0.5rem; color: gray; text-align: center; line-height: 1.4;">
+<b>Disclaimer:</b><br>
+Diese Anwendung dient ausschließlich zu Demonstrations- und Lehrzwecken. 
+Es wird keine Gewähr für die Richtigkeit, Vollständigkeit oder Aktualität der bereitgestellten Inhalte übernommen.<br>
+Die Nutzung erfolgt auf eigene Verantwortung.<br>
+Eine kommerzielle Verwendung ist ausdrücklich nicht gestattet.<br>
+Für Schäden materieller oder ideeller Art, die durch die Nutzung der App entstehen, wird keine Haftung übernommen.
+<br><br>Prof. Dr.-Ing. Hendrik Dubbe
+</div>
+""", unsafe_allow_html=True)
