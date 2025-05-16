@@ -153,17 +153,34 @@ if "df" in st.session_state:
                         step=1.0, key="spline_smoothness_input", on_change=sync_spline_input)
 
     # Interpolation vorbereiten mit Glättung
-    # --- Interpolation vorbereiten mit Glättung inkl. Edge-Padding ---
-    # Dummy-Punkte links und rechts hinzufügen, um Oszillationen zu vermeiden
-    x_pad = np.concatenate(([x_raw[0] - 5], x_raw, [x_raw[-1] + 5]))
-    y_pad = np.concatenate(([y_raw[0]], y_raw, [y_raw[-1]]))
-    
-    # Spline über gepaddete Daten berechnen
-    spline = UnivariateSpline(x_pad, y_pad, s=st.session_state.spline_smoothness)
-    
-    # Interpolationspunkte für das Plotten
+    x_raw = df['Ort_mm'].values
+    y_raw = df['Dicke_um'].values
     x_interp = np.arange(np.min(x_raw), np.max(x_raw), 1.0)
+    spline = UnivariateSpline(x_raw, y_raw, s=st.session_state.spline_smoothness)
     y_interp = spline(x_interp)
+    
+    # --- Hüllkurve gegen Rand-Wiederanstieg (NEU HIER) ---
+    def raised_cosine(x, xmin, xmax, edge_fraction=0.1):
+        width = xmax - xmin
+        edge_width = width * edge_fraction
+    
+        envelope = np.ones_like(x)
+    
+        # Links dämpfen
+        mask_left = x < xmin + edge_width
+        envelope[mask_left] = 0.5 * (1 - np.cos(np.pi * (x[mask_left] - xmin) / edge_width))
+    
+        # Rechts dämpfen
+        mask_right = x > xmax - edge_width
+        envelope[mask_right] = 0.5 * (1 - np.cos(np.pi * (xmax - x[mask_right]) / edge_width))
+    
+        return envelope
+    
+    # Raised Cosine mit 10% Randdämpfung
+    hull = raised_cosine(x_interp, np.min(x_raw), np.max(x_raw), edge_fraction=0.1)
+    
+    # Dämpfung anwenden
+    y_interp *= hull
 
     # h_max und Sb_50 berechnen
     h_max = np.max(y_interp)
