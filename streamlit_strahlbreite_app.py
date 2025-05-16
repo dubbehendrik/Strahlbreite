@@ -199,10 +199,8 @@ if "df" in st.session_state:
     exact_step = max((np.max(x_raw) - np.min(x_raw)) / 100, 0.01)
 
     if "preset_delta_y" in st.session_state:
-        if "delta_y" not in st.session_state:
-            st.session_state["delta_y"] = st.session_state["preset_delta_y"]
-        if "delta_y_input" not in st.session_state:
-            st.session_state["delta_y_input"] = st.session_state["preset_delta_y"]
+        st.session_state["delta_y"] = st.session_state["preset_delta_y"]
+        st.session_state["delta_y_input"] = st.session_state["preset_delta_y"]
         del st.session_state["preset_delta_y"]
 
     if "delta_y" not in st.session_state and not np.isnan(sb_50):
@@ -224,17 +222,13 @@ if "df" in st.session_state:
         col_btn1, col_btn2 = st.columns(2)
         with col_btn1:
             if st.button(f"SET ÜL = 3 (67%)   - {sb_50/3:.2f} mm"):
-                st.session_state.update({
-                    "delta_y": sb_50 / 3,
-                    "delta_y_input": sb_50 / 3
-                })
+                st.session_state["preset_delta_y"] = sb_50 / 3
+                st.experimental_rerun()
         
         with col_btn2:
             if st.button(f"SET ÜL = 2 (50%)   - {sb_50/2:.2f} mm"):
-                st.session_state.update({
-                    "delta_y": sb_50 / 2,
-                    "delta_y_input": sb_50 / 2
-                })
+                st.session_state["preset_delta_y"] = sb_50 / 2
+                st.experimental_rerun()
     
     with col4:
         st.number_input("Exakter Bahnversatz Δy [mm]", min_value=0.1, max_value=float(max_slider_value),
