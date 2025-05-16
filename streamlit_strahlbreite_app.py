@@ -47,9 +47,6 @@ if uploaded_file is not None and uploaded_file != st.session_state.get("uploaded
     st.session_state.source_label = uploaded_file.name
     st.rerun()
 
-if uploaded_file is None and "file_to_use" in st.session_state and st.session_state.get("uploaded_file") is not None:
-    st.session_state.clear()
-    st.rerun()
 
 # --- Beispieldaten Buttons ---
 col_demo1, col_demo2, col_demo3, col_demo4 = st.columns(4)
