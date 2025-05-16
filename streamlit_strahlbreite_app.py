@@ -153,10 +153,16 @@ if "df" in st.session_state:
                         step=1.0, key="spline_smoothness_input", on_change=sync_spline_input)
 
     # Interpolation vorbereiten mit Glättung
-    x_raw = df['Ort_mm'].values
-    y_raw = df['Dicke_um'].values
+    # --- Interpolation vorbereiten mit Glättung inkl. Edge-Padding ---
+    # Dummy-Punkte links und rechts hinzufügen, um Oszillationen zu vermeiden
+    x_pad = np.concatenate(([x_raw[0] - 5], x_raw, [x_raw[-1] + 5]))
+    y_pad = np.concatenate(([y_raw[0]], y_raw, [y_raw[-1]]))
+    
+    # Spline über gepaddete Daten berechnen
+    spline = UnivariateSpline(x_pad, y_pad, s=st.session_state.spline_smoothness)
+    
+    # Interpolationspunkte für das Plotten
     x_interp = np.arange(np.min(x_raw), np.max(x_raw), 1.0)
-    spline = UnivariateSpline(x_raw, y_raw, s=st.session_state.spline_smoothness)
     y_interp = spline(x_interp)
 
     # h_max und Sb_50 berechnen
