@@ -226,10 +226,12 @@ if "df" in st.session_state:
             if st.button(f"SET ÜL = 3 (67%)   - {sb_50/3:.2f} mm"):
                 st.session_state["delta_y"] = sb_50 / 3
                 st.session_state["delta_y_input"] = sb_50 / 3
+                st.rerun()
         with col_btn2:
             if st.button(f"SET ÜL = 2 (50%)   - {sb_50/2:.2f} mm"):
                 st.session_state["delta_y"] = sb_50 / 2
                 st.session_state["delta_y_input"] = sb_50 / 2
+                st.rerun()
     
     with col4:
         st.number_input("Exakter Bahnversatz Δy [mm]", min_value=0.1, max_value=float(max_slider_value),
