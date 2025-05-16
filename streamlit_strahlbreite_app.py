@@ -61,7 +61,7 @@ with col_demo1:
         response = requests.get(url)
         if response.status_code == 200:
             st.session_state.file_to_use = BytesIO(response.content)
-            st.session_state.source_label = "Beispiel 1: Enger Strahl"
+            st.session_state.source_label = "Beispiel 1 geladen"
             st.session_state.uploaded_file = None
             st.rerun()
 
@@ -72,7 +72,7 @@ with col_demo2:
         response = requests.get(url)
         if response.status_code == 200:
             st.session_state.file_to_use = BytesIO(response.content)
-            st.session_state.source_label = "Beispiel 2: Breiter Strahl"
+            st.session_state.source_label = "Beispiel 2 geladen"
             st.session_state.uploaded_file = None
             st.rerun()
 
@@ -83,7 +83,7 @@ with col_demo3:
         response = requests.get(url)
         if response.status_code == 200:
             st.session_state.file_to_use = BytesIO(response.content)
-            st.session_state.source_label = "Beispiel 3: Asymmetrisch"
+            st.session_state.source_label = "Beispiel 3 geladen"
             st.session_state.uploaded_file = None
             st.rerun()
 
@@ -95,20 +95,29 @@ with col_demo4:
 if "file_to_use" in st.session_state:
     col_file, col_remove = st.columns([8, 2])
     with col_file:
-        st.success(f"📄 {st.session_state.source_label}")
+        st.success(f"{st.session_state.source_label}")
     with col_remove:
         if st.session_state.get("uploaded_file") is None:
             if st.button("❌ Entfernen"):
                 st.session_state.clear()
                 st.rerun()
 
-
-
 # Wenn die Datei gelöscht wird, Session State zurücksetzen
 if uploaded_file is None and "df" in st.session_state:
     for key in list(st.session_state.keys()):
         del st.session_state[key]
     st.rerun()
+
+file_like = st.session_state.get("file_to_use", uploaded_file)
+
+if file_like is not None and "df" not in st.session_state:
+    df = pd.read_excel(file_like)
+    df = df.iloc[:, :2]  # Nur die ersten beiden Spalten verwenden
+    df.columns = ['Ort_mm', 'Dicke_um']
+    df = df.dropna().reset_index(drop=True)
+    min_len = min(len(df['Ort_mm']), len(df['Dicke_um']))
+    df = df.iloc[:min_len]
+    st.session_state.df = df
 
 if uploaded_file and "df" not in st.session_state:
     df = pd.read_excel(uploaded_file)
