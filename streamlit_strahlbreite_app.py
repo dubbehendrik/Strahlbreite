@@ -89,7 +89,7 @@ with col_demo3:
 
 with col_demo4:
     with open("Exp_Strahlbreite_Profil_ideal.xlsx", "rb") as f:
-        st.download_button("📥 Template herunterladen", f, file_name="Template_SingleBeam.xlsx")
+        st.download_button("📥 Template herunterladen", f, file_name="Exp_Strahlbreite_Profil_ideal.xlsx")
 
 # --- Anzeige der aktuellen Datei ---
 if "file_to_use" in st.session_state:
