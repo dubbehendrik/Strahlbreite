@@ -63,9 +63,10 @@ with col_demo1:
         response = requests.get(url)
         if response.status_code == 200:
             st.session_state.file_to_use = BytesIO(response.content)
-            st.session_state.source_label = "Beispiel 1 geladen"
+            st.session_state.source_label = "Beispiel X geladen"
             st.session_state.uploaded_file = None
-            st.rerun()
+            st.session_state.df = None  # falls nötig, um Neuladen zu erzwingen
+            st.experimental_rerun()
 
 with col_demo2:
     if st.button("Beispiel 2"):
