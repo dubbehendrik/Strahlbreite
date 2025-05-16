@@ -101,9 +101,8 @@ if "file_to_use" in st.session_state:
                 st.rerun()
 
 # Wenn die Datei gelöscht wird, Session State zurücksetzen
-if uploaded_file is None and "df" in st.session_state:
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
+if uploaded_file is None and st.session_state.get("uploaded_file") is not None:
+    st.session_state.clear()
     st.rerun()
 
 # Wenn Datei vorhanden: file_to_use > uploaded_file
