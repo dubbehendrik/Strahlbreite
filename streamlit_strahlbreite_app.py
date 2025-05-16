@@ -119,15 +119,6 @@ if file_like is not None and "df" not in st.session_state:
     df = df.iloc[:min_len]
     st.session_state.df = df
 
-if uploaded_file and "df" not in st.session_state:
-    df = pd.read_excel(uploaded_file)
-    df = df.iloc[:, :2]  # Nur die ersten beiden Spalten verwenden
-    df.columns = ['Ort_mm', 'Dicke_um']
-    df = df.dropna().reset_index(drop=True)
-    min_len = min(len(df['Ort_mm']), len(df['Dicke_um']))
-    df = df.iloc[:min_len]
-    st.session_state.df = df
-
 # Wenn Daten vorhanden sind, geht es weiter
 if "df" in st.session_state:
     df = st.session_state.df
