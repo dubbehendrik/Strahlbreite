@@ -47,10 +47,10 @@ if uploaded_file is not None and uploaded_file != st.session_state.get("uploaded
     st.session_state.source_label = uploaded_file.name
     st.rerun()
 
-# Fix: file_to_use stabil halten bei Interaktionen (Slider etc.)
-if "file_to_use" not in st.session_state and uploaded_file is not None:
-    st.session_state.file_to_use = uploaded_file
-    st.session_state.source_label = uploaded_file.name
+# --- Beispiel-Daten Handling ---
+if "file_to_use" not in st.session_state:
+    st.session_state.file_to_use = None
+    st.session_state.source_label = "Keine Datei geladen"
 
 # --- Beispieldaten Buttons ---
 col_demo1, col_demo2, col_demo3, col_demo4 = st.columns(4)
@@ -107,11 +107,7 @@ if uploaded_file is None and "df" in st.session_state:
     st.rerun()
 
 # Wenn Datei vorhanden: file_to_use > uploaded_file
-file_like = None
-if "file_to_use" in st.session_state:
-    file_like = st.session_state.file_to_use
-elif uploaded_file is not None:
-    file_like = uploaded_file
+file_like = st.session_state.get("file_to_use", None)
 
 # Datei einlesen (nur falls nicht schon geladen)
 if file_like is not None and "df" not in st.session_state:
