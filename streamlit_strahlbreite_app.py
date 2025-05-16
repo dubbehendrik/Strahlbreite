@@ -55,7 +55,7 @@ if uploaded_file is None and "file_to_use" in st.session_state and st.session_st
 col_demo1, col_demo2, col_demo3, col_demo4 = st.columns(4)
 
 with col_demo1:
-    if st.button("Beispiel 1: Enger Strahl"):
+    if st.button("Beispiel 1"):
         st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_ideal.xlsx"
         response = requests.get(url)
@@ -66,7 +66,7 @@ with col_demo1:
             st.rerun()
 
 with col_demo2:
-    if st.button("Beispiel 2: Breiter Strahl"):
+    if st.button("Beispiel 2"):
         st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_real1.xlsx"
         response = requests.get(url)
@@ -77,7 +77,7 @@ with col_demo2:
             st.rerun()
 
 with col_demo3:
-    if st.button("Beispiel 3: Asymmetrisch"):
+    if st.button("Beispiel 3"):
         st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_real2.xlsx"
         response = requests.get(url)
