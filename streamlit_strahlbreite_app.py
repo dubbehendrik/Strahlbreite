@@ -59,45 +59,36 @@ col_demo1, col_demo2, col_demo3, col_demo4 = st.columns(4)
 
 with col_demo1:
     if st.button("Beispiel 1"):
+        st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_ideal.xlsx"
         response = requests.get(url)
         if response.status_code == 200:
-            st.session_state.update({
-                "file_to_use": BytesIO(response.content),
-                "source_label": "Beispiel 1 geladen",
-                "uploaded_file": None,
-            })
-            if "df" in st.session_state:
-                del st.session_state["df"]
-            st.experimental_rerun()
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 1 geladen"
+            st.session_state.uploaded_file = None
+            st.rerun()
 
 with col_demo2:
     if st.button("Beispiel 2"):
+        st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_real1.xlsx"
         response = requests.get(url)
         if response.status_code == 200:
-            st.session_state.update({
-                "file_to_use": BytesIO(response.content),
-                "source_label": "Beispiel 2 geladen",
-                "uploaded_file": None,
-            })
-            if "df" in st.session_state:
-                del st.session_state["df"]
-            st.experimental_rerun()
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 2 geladen"
+            st.session_state.uploaded_file = None
+            st.rerun()
 
 with col_demo3:
     if st.button("Beispiel 3"):
+        st.session_state.clear()
         url = "https://raw.githubusercontent.com/dubbehendrik/Strahlbreite/main/Exp_Strahlbreite_Profil_real2.xlsx"
         response = requests.get(url)
         if response.status_code == 200:
-            st.session_state.update({
-                "file_to_use": BytesIO(response.content),
-                "source_label": "Beispiel 3 geladen",
-                "uploaded_file": None,
-            })
-            if "df" in st.session_state:
-                del st.session_state["df"]
-            st.experimental_rerun()
+            st.session_state.file_to_use = BytesIO(response.content)
+            st.session_state.source_label = "Beispiel 3 geladen"
+            st.session_state.uploaded_file = None
+            st.rerun()
 
 with col_demo4:
     with open("Exp_Strahlbreite_Profil_ideal.xlsx", "rb") as f:
