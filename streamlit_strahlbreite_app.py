@@ -74,9 +74,10 @@ with col_demo2:
         response = requests.get(url)
         if response.status_code == 200:
             st.session_state.file_to_use = BytesIO(response.content)
-            st.session_state.source_label = "Beispiel 2 geladen"
+            st.session_state.source_label = "Beispiel 1 geladen"
             st.session_state.uploaded_file = None
-            st.rerun()
+            st.session_state.pop("df", None)
+            st.experimental_rerun()
 
 with col_demo3:
     if st.button("Beispiel 3"):
@@ -86,7 +87,8 @@ with col_demo3:
             st.session_state.file_to_use = BytesIO(response.content)
             st.session_state.source_label = "Beispiel 3 geladen"
             st.session_state.uploaded_file = None
-            st.rerun()
+            st.session_state.pop("df", None)
+            st.experimental_rerun()
 
 with col_demo4:
     with open("Exp_Strahlbreite_Profil_ideal.xlsx", "rb") as f:
