@@ -108,8 +108,14 @@ if uploaded_file is None and "df" in st.session_state:
         del st.session_state[key]
     st.rerun()
 
-file_like = st.session_state.get("file_to_use", uploaded_file)
+# Wenn Datei vorhanden: file_to_use > uploaded_file
+file_like = None
+if "file_to_use" in st.session_state:
+    file_like = st.session_state.file_to_use
+elif uploaded_file is not None:
+    file_like = uploaded_file
 
+# Datei einlesen (nur falls nicht schon geladen)
 if file_like is not None and "df" not in st.session_state:
     df = pd.read_excel(file_like)
     df = df.iloc[:, :2]  # Nur die ersten beiden Spalten verwenden
