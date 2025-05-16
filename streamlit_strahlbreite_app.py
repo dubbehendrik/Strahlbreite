@@ -276,7 +276,7 @@ if "df" in st.session_state:
     for i in range(n_bahnen):
         shift = i * delta_y
         x_shifted = x_interp + shift
-        y_shifted = spline(x_interp)
+        y_shifted = y_interp
         y_total += interp1d(x_shifted, y_shifted, bounds_error=False, fill_value=0)(x_total)
 
     # h_ges automatisch bestimmen
