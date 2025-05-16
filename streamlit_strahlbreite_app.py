@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 # --- Layout: Logo und Titel ---
 col_title, col_logo = st.columns([4, 1])
 with col_logo:
-    st.image("HSE-Logo.jpg", width=200)
+    st.image("HSE-Logo.jpg", width=1000)
 
 st.title("Vom Einzelstrahl zur Totalbeschichtung")
 
