@@ -28,12 +28,14 @@ Wichtig:
 - Sobald eine Excel-Datei geladen wurde, wird diese verwendet.
 - Um wieder auf Beispieldaten zu wechseln, musst du die Excel (X) entfernen.
 
-Das Tool berechnet automatisch:
-- Die Halbhöhenbreite $Sb_{50}$
-- Den Überlappungsgrad $ÜL$
-- Die mittlere Gesamtschichtdicke $h_{ges}$
+Das Tool berechnet automatisch
+- die Maximalhöhe des Einzelstrahls $h_{max}$
+- die Halbhöhenbreite $Sb_{50}$
+sowie basierend auf einer frei wählbaren Anzahl an Einzelstrahlen und einem vorgegebenen Bahnversatz 
+- den Überlappungsgrad $ÜL$
+- die mittlere Gesamtschichtdicke $h_{ges}$
 
-Viel Spaß beim Ausprobieren!
+Es gibt darüber hinaus die Möglichkeit, die Gesamtschichtdicke manuell zu ermitteln. 
 """)
 
 # --- Datei-Upload ---
