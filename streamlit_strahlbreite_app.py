@@ -214,6 +214,13 @@ if "df" in st.session_state:
     def sync_input():
         st.session_state["delta_y_input"] = st.session_state["delta_y"]
 
+    # Sicherstellen, dass delta_y <= sb_50
+    if "delta_y" in st.session_state:
+        if st.session_state["delta_y"] > sb_50:
+            st.session_state["delta_y"] = sb_50
+        if st.session_state["delta_y_input"] > sb_50:
+            st.session_state["delta_y_input"] = sb_50
+    
     col3, col4 = st.columns([0.6, 0.4])
     with col3:
         slider_val = st.slider("Bahnversatz Δy [mm]", min_value=0.1, max_value=float(max_slider_value),
