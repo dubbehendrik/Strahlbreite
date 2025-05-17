@@ -18,9 +18,9 @@ st.title("Vom Einzelstrahl zur Totalbeschichtung")
 # --- Hinweise zur Verwendung ---
 with st.expander("ℹ️ Hinweise zur Verwendung"):
     st.markdown("""
-Diese App dient zur Visualisierung und Analyse von Strahlbreiten und Totalbeschichtungen in der Applikationstechnik.
+Diese App dient zur Visualisierung und Analyse eines Einzelstrahls und dem Aufbau der Totalbeschichtungen daraus.
 
-Du kannst:
+Sie können damit:
 - **Eigene Excel-Dateien hochladen** mit einem Einzelstrahlprofil (Ort [mm], Schichtdicke [µm]).
 - Oder **Beispieldaten verwenden**, um das Tool ohne eigene Daten zu testen.
 
@@ -28,7 +28,7 @@ Wichtig:
 - Sobald eine Excel-Datei geladen wurde, wird diese verwendet.
 - Um wieder auf Beispieldaten zu wechseln, musst du die Excel (X) entfernen.
 
-Das Tool berechnet automatisch
+Das Einzelstrahl-Profil kann dann mittels Spline-Interpolation geggättet werden und sas Tool berechnet dann automatisch
 - die Maximalhöhe des Einzelstrahls $h_{max}$
 - die Halbhöhenbreite $Sb_{50}$
 sowie basierend auf einer frei wählbaren Anzahl an Einzelstrahlen und einem vorgegebenen Bahnversatz 
